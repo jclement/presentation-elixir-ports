@@ -26,7 +26,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 'stable'
+          node-version: '22'
 
       # Remove README.md
       - name: Remove README.md
