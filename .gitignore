@@ -32,7 +32,11 @@ assets/node_modules/
 *.log
 
 .claude
+
+# Execute sync binary and sync state
 execute-sync
 last_sync_date.txt
-presentation.html
-presentation.pdf
+
+# presentation output
+index.html
+index.pdf
