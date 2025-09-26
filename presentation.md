@@ -397,8 +397,8 @@ end
 <!-- class: invert -->
 # PubSub
 
-- Decouples producers from consumers
 - One process broadcasts, many can listen
+- Decouples producers from consumers
 - No need to track who's listening
 - Works across Elixir nodes!
 - Built into Phoenix!
@@ -441,7 +441,7 @@ This is how multiple browser tabs can all show the same live data!
 - OTP GenServer wraps the Port and emits lines, and stores buffer (last N lines)
 - LiveView renders and updates without custom JS
 - Single file app because... why not!
-- Phoenix PubSub pushes lines from CLI app to **all** connected web viewers
+- Phoenix PubSub pushes log lines from CLI app to **all** connected web viewers
 
 ![bg fit right](images/summary.png)
 
@@ -454,8 +454,8 @@ This is how multiple browser tabs can all show the same live data!
 # Takeaways
 
 - Ports are a great option to talk to external processes
-- Wrapping a port in a GenServer so you can share it throughout your app
+- GenServer are great for global state / wrapping ports
 - Single-file Phoenix is handy for demos and small apps
 - PubSub is the easy way to keep multiple browser windows updated when things happen.
 
-![bg right fit](images/takeaway.png)
+![bg right fit](images/qr.png)
