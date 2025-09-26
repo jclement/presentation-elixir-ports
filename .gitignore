@@ -1,0 +1,38 @@
+# macOS
+.DS_Store
+
+# Editors/IDEs
+.vscode/
+.idea/
+.elixir_ls/
+
+# Elixir / Mix
+/_build/
+/deps/
+/cover/
+/doc/
+/tmp/
+/log/
+*.ez
+erl_crash.dump
+*.beam
+
+# Env & local state
+.env
+.env.*
+config.env
+last_sync_date.txt
+
+# Node (if ever used)
+node_modules/
+assets/node_modules/
+
+# Docker/runtime logs
+*.pid
+*.log
+
+.claude
+execute-sync
+last_sync_date.txt
+presentation.html
+presentation.pdf
