@@ -10,17 +10,16 @@ defmodule LogStreamer do
   use GenServer
 
   @moduledoc false
-  @name __MODULE__
   @topic "logs:execute_sync"
   @max_lines 20
 
   # Public API
-  def start_link(_opts), do: GenServer.start_link(__MODULE__, :ok, name: @name)
+  def start_link(_opts), do: GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   def topic, do: @topic
-  def get_buffer, do: GenServer.call(@name, :get_buffer)
-  def start, do: GenServer.call(@name, :start)
-  def stop, do: GenServer.call(@name, :stop)
-  def status, do: GenServer.call(@name, :status)
+  def get_buffer, do: GenServer.call(__MODULE__, :get_buffer)
+  def start, do: GenServer.call(__MODULE__, :start)
+  def stop, do: GenServer.call(__MODULE__, :stop)
+  def status, do: GenServer.call(__MODULE__, :status)
 
   # GenServer
   @impl true

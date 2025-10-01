@@ -37,7 +37,7 @@ size: 16:9
 * Learn to use Elixir **Ports** to interact with an external process.
 * Micro introduction to **GenServers**
 * Building a **single-file Phoenix LiveView** app
-* Make it live with **Phoenix PubSub**
+* Make it *live* with **Phoenix PubSub**
 
 ![bg right fit](images/plan.png)
 
@@ -136,9 +136,7 @@ port = Port.open(...)  # Who owns this?
 
 **With GenServer:**
 ```elixir
-PortManager.start()     # GenServer owns the port
 PortManager.get_lines() # Clean API for everyone
-PortManager.stop()      # Managed lifecycle
 # State (partial chunks, buffer) lives in GenServer
 # Port cleanup handled automatically
 ```
@@ -149,13 +147,8 @@ PortManager.stop()      # Managed lifecycle
 defmodule SimplePortServer do
   use GenServer
 
-  def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
-  end
-
-  def get_chunks do
-    GenServer.call(__MODULE__, :get_chunks)
-  end
+  def start_link(opts \\ []), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+  def get_chunks, do: GenServer.call(__MODULE__, :get_chunks)
 
   @impl true
   def init(_opts) do
@@ -178,6 +171,10 @@ end
 
 ---
 
+![bg fit 30%](images/demo.png)
+
+---
+
 ## GenServer: own the Port and state
 
 Responsibilities:
@@ -187,6 +184,7 @@ Responsibilities:
 - Track online/offline
 - Provide a simple API (start/stop/status/get_buffer)
 
+<!--
 ---
 
 ```elixir
@@ -198,7 +196,6 @@ defmodule LogStreamer do
 
   # Public API
   def start_link(_), do: GenServer.start_link(__MODULE__, :ok, name: @name)
-  def topic, do: @topic
   def get_buffer, do: GenServer.call(@name, :get_buffer)
 
   # GenServer callbacks
@@ -206,6 +203,11 @@ defmodule LogStreamer do
     state = %{port: nil, buffer: [], acc: ""}
     send(self(), :ensure_started)
     {:ok, state}
+  end
+
+  @impl true
+  def handle_call(:get_buffer, _from, state) do
+    {:reply, state.buffer, state}
   end
 
   def handle_info({port, {:data, chunk}}, %{port: port, acc: acc} = state) do
@@ -227,6 +229,7 @@ defmodule LogStreamer do
   end
 end
 ```
+-->
 
 ---
 
@@ -264,13 +267,13 @@ Mix.install([
   {:jason, "~> 1.4"} # Jason
 ])
 
-# The web server entry point
+# The web server entry point (infrastructure) 
 defmodule DemoEndpoint do
-  # Receives HTTP requests, routes them
+  # Receives HTTP requests, routes them.  
 end
 
-# URL routing and request pipelines
-defmodule DemoRouter do
+# URL routing and request pipelines (application logic)
+defmodule DemoRouter do 
   # Maps URLs to LiveViews
 end
 
@@ -287,7 +290,7 @@ Process.sleep(:infinity)
 
 ---
 
-## Endpoint: The Web Server
+## Endpoint: Infrastructure-level Concerns
 
 ```elixir
 defmodule DemoEndpoint do
@@ -317,7 +320,7 @@ end
 
 ---
 
-## Router: URL Mapping
+## Router: Application Logic & URL Mapping
 
 ```elixir
 defmodule DemoRouter do
@@ -409,7 +412,7 @@ end
 
 ```elixir
 # In your GenServer - broadcast when something happens
-def handle_info({port, {:data, chunk}}, state) do
+def handle_info({port, {:data, line}}, state) do
   # Process the chunk into a line...
   Phoenix.PubSub.broadcast(
     Demo.PubSub,           # The PubSub server
